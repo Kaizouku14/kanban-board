@@ -16,6 +16,7 @@ import {
 } from "../ui/form";
 
 const SignInForm = () => {
+  
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -58,8 +59,7 @@ const SignInForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full" 
-          type="submit">Sign in</Button>
+        <Button className="w-full" type="submit">Sign in</Button>
       </form>
     </Form>
   );

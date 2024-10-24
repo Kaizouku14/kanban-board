@@ -1,3 +1,4 @@
+import CreateProject from "@/components/Forms/create-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
 
@@ -49,8 +50,8 @@ const DashBoard = () => {
           </TabsTrigger>
         </TabsList>
 
-        <TabsContent value="add">
-           
+        <TabsContent value="add" className="flex justify-center ">
+            <CreateProject/>
         </TabsContent>
 
         {/* Data Content */}
