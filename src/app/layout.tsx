@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { ThemeProvider } from "@/components/ThemeProvider/theme-provider";
+import Header from "@/components/Header/header";
 
 export const metadata: Metadata = {
   title: "Kanban Board",
@@ -17,6 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider>
+          <Header/>
            {children}
         </ThemeProvider>
       </body>
