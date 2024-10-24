@@ -20,7 +20,7 @@ export const signUpFormSchema = z.object({
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords do not match. Please try again.",
   path: ["confirmPassword"], 
-});
+}); 
 
 export type signInFormSchema = typeof signInFormSchema;
 export type signUpFormSchema = typeof signUpFormSchema;

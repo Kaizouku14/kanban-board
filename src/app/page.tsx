@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-const Signin = () => {
+const Home = () => {
   return (
     <div className="flex justify-center">
         <Tabs defaultValue="signin" className="w-[400px]">
@@ -48,4 +48,4 @@ const Signin = () => {
   );
 };
 
-export default Signin;
+export default Home;
