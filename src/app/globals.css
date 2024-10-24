@@ -66,8 +66,8 @@
     @apply font-poppins;
   }
 
-  html,
   body {
     @apply bg-background text-foreground;
   }
+  
 }
