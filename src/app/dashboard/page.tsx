@@ -1,3 +1,4 @@
+import KanbanBoard from "@/components/Board/kanban-board";
 import CreateProject from "@/components/Forms/create-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
@@ -6,7 +7,7 @@ const DashBoard = () => {
   const data = [
     {
       id: 1,
-      projectName: "ProjectName",
+      projectName: "Hotel management system",
       projectData: [
         {
           todoList: [],
@@ -18,7 +19,7 @@ const DashBoard = () => {
     },
     {
       id: 2,
-      projectName: "ProjectName2",
+      projectName: "Car rental management system",
       projectData: [
         {
           todoList: [],
@@ -33,7 +34,7 @@ const DashBoard = () => {
   return (
     <div className="flex ">
       <Tabs defaultValue="signin" className="w-full flex flex-col gap-y-1.5">
-        <TabsList className="flex flex-wrap justify-between items-center w-fit gap-x-2">
+        <TabsList className="grid grid-cols-4 grid-flow-row  items-center w-fit h-auto gap-2">
           {data.length > 0 &&
             data.map((value) => (
               <TabsTrigger
@@ -60,7 +61,7 @@ const DashBoard = () => {
               key={value.id}
               value={value.id.toString()}
           >
-              {value.projectName}
+             <KanbanBoard/>
           </TabsContent>
         ))}
       </Tabs>
@@ -71,24 +72,3 @@ const DashBoard = () => {
 export default DashBoard;
 
 
-{/* <div className="h-96 border rounded-lg shadow flex flex-col justify-center p-2">
-<h1 className="border-b py-1 w-full text-center">TO-DO LIST</h1>
-<div className="flex flex-col h-full"></div>
-</div>
-
-<div className="h-96 border rounded-lg shadow flex flex-col justify-center p-2">
-<h1 className="border-b py-1 w-full text-center">
-  WORK IN PROGRESS
-</h1>
-<div className="flex flex-col h-full"></div>
-</div>
-
-<div className="h-96 border rounded-lg shadow flex flex-col justify-center p-2">
-<h1 className="border-b py-1 w-full text-center">VALIDATE</h1>
-<div className="flex flex-col h-full"></div>
-</div>
-
-<div className="h-96 border rounded-lg shadow flex flex-col justify-center p-2">
-<h1 className="border-b py-1 w-full text-center">COMPLETE</h1>
-<div className="flex flex-col h-full"></div>
-</div> */}
