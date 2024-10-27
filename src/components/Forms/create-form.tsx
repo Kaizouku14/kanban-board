@@ -1,112 +1,73 @@
 "use client";
 
-import { createFormSchema } from "@/lib/form-schema";
-import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Button } from "../ui/button";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { ScrollArea } from "../ui/scroll-area";
-import { X } from "lucide-react";
+import { FC, FormEvent, useState } from "react";
+import { motion } from "framer-motion"
+import { Plus } from "lucide-react";
+import { Card } from "../Board/kanban-board";
 
-const CreateProject = () => {
-  const [tasks, setTasks] = React.useState<string[]>([]);
-  const [taskInput, setTaskInput] = React.useState("");
+interface AddCardProps {
+  column: string;
+  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+}
 
-  const form = useForm<z.infer<typeof createFormSchema>>({
-    resolver: zodResolver(createFormSchema),
-    defaultValues: {
-      projectName: "",
-    },
-  });
+const AddCard:FC<AddCardProps> = ({ column, setCards }) => {
+  const [text, setText] = useState("");
+  const [adding, setAdding] = useState(false);
 
-  function onSubmit(values: z.infer<typeof createFormSchema>) {
-    console.log(values);
-    console.log(tasks)
-  }
+  const handleSubmit = (e : FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
 
-  function addTask(task: string) {
-    if (task.trim()) {
-      setTasks([...tasks, task]);
-      setTaskInput("");
-    }
-  }
+    if (!text.trim().length) return;
 
-  function removeTask(index: number) {
-    setTasks(tasks.filter((_, i) => i !== index));
-  }
+    const newCard = {
+      column,
+      title: text.trim(),
+      id: Math.random().toString(),
+    };
+
+    setCards((prev) => [...prev, newCard]);
+    setAdding(false);
+  };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex gap-x-12 items-center h-96"
-      >
-        <div className="w-96 space-y-8">
-          <FormField
-            control={form.control}
-            name="projectName"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Project Name</FormLabel>
-                <FormControl>
-                  <Input placeholder="Project name..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
+    <>
+      {adding ? (
+        <motion.form layout onSubmit={handleSubmit}>
+          <textarea
+            onChange={(e) => setText(e.target.value)}
+            autoFocus
+            placeholder="Add new task..."
+            className="w-full rounded border border-violet-400 bg-violet-400/20 p-3 text-sm text-neutral-50 placeholder-violet-300 focus:outline-0"
           />
-
-          <div className="flex gap-x-4">
-            <Input
-              placeholder="Task to-do..."
-              value={taskInput}
-              onChange={(e) => setTaskInput(e.target.value)}
-            />
-            <Button type="button" onClick={() => addTask(taskInput)}>
-              Add
-            </Button>
+          <div className="mt-1.5 flex items-center justify-end gap-1.5">
+            <button
+              onClick={() => setAdding(false)}
+              className="px-3 py-1.5 text-xs text-neutral-400 transition-colors hover:text-neutral-50"
+            >
+              Close
+            </button>
+            <button
+              type="submit"
+              className="flex items-center gap-1.5 rounded bg-neutral-50 px-3 py-1.5 text-xs text-neutral-950 transition-colors hover:bg-neutral-300"
+            >
+              <span>Add</span>
+              <Plus/>
+            </button>
           </div>
-
-          <Button className="w-full" type="submit">
-            Create
-          </Button>
-        </div>
-
-        <ScrollArea className="size-80">
-          <div className="flex flex-col rounded-lg border border-gray-300 p-4 gap-2">
-            {tasks.length > 0 ? (
-              tasks.map((task, index) => (
-                <div
-                  key={index}
-                  className="flex items-center justify-between gap-x-2 border border-gray-200 rounded-lg p-2 w-full h-10 "
-                >
-                  <span className="truncate">{task}</span>
-                  <button
-                    className="text-red-500 hover:text-red-700 focus:outline-none"
-                    onClick={() => removeTask(index)}
-                  >
-                    <X size={18} />
-                  </button>
-                </div>
-              ))
-            ) : (
-              <p className="text-gray-500">No tasks added yet.</p>
-            )}
-          </div>
-        </ScrollArea>
-      </form>
-    </Form>
+        </motion.form>
+      ) : (
+        <motion.button
+          layout
+          onClick={() => setAdding(true)}
+          className="flex w-full items-center gap-1.5 px-3 py-1.5 text-xs text-foreground transition-colors hover:text-gray-500"
+        >
+          <span>Add card</span>
+          <Plus/>
+        </motion.button>
+      )}
+    </>
   );
 };
 
-export default CreateProject;
+
+export default AddCard;
