@@ -2,22 +2,23 @@ import React from "react";
 import { Card, CardDescription, CardHeader, CardTitle } from "../ui/card";
 
 interface TaskCardProps {
-  taskId: number;
+  index : number;
   taskName: string;
   taskDescription?: string;
   setActiveCard: (value: number | null) => void;
 }
 
 const TaskCard: React.FC<TaskCardProps> = ({
-  taskId,
+  index,
   taskName,
   taskDescription,
   setActiveCard,
 }) => {
+  
   return (
     <Card
       draggable
-      onDragStart={() => setActiveCard(taskId)}
+      onDragStart={() => setActiveCard(index)}
       onDragEnd={() => setActiveCard(null)}
       className="active:border-red-600"
     >

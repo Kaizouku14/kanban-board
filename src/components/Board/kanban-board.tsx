@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import TaskColumn from "./task-column";
 
-const items = [
+const initialItems = [
   {
     id: 1,
     title: "TO-DO LIST",
@@ -27,22 +27,31 @@ const items = [
 ];
 
 const KanbanBoard = () => {
+  const [tasks, setTasks] = useState(initialItems);
   const [activeCard, setActiveCard] = useState<number | null>(null);
+
+  const onDrop = (columnTitle: string, index: number) => {
+    console.log(`${activeCard} is going to place into ${columnTitle} at position ${index}`);
+
+    if (activeCard === null || activeCard === undefined) return;
+
+   
+  };
+
 
   return (
     <>
       <div className="grid grid-cols-4 gap-x-4">
-        {items.map((value) => (
+        {tasks.map((value, index) => (
           <TaskColumn
-            key={value.id}
+            key={index}
             title={value.title}
             data={value.data}
             setActiveCard={setActiveCard}
+            onDrop={onDrop}
           />
         ))}
       </div>
-
-      <h1 className="text-white">{activeCard}</h1>
     </>
   );
 };
