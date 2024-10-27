@@ -24,6 +24,12 @@ export const signUpFormSchema = z
     path: ["confirmPassword"],
   });
 
+export const createFormSchema = z.object({
+  projectName: z
+    .string()
+    .min(1, { message: "projectName is required." }),
+})
 
 export type signInFormSchema = typeof signInFormSchema;
 export type signUpFormSchema = typeof signUpFormSchema;
+export type createFormSchema = typeof createFormSchema;
