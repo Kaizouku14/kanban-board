@@ -1,4 +1,4 @@
-"use cleint";
+"use client";
 
 import { signUpFormSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
