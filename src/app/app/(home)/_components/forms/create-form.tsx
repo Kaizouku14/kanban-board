@@ -5,18 +5,18 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Button } from "../ui/button";
-import {
+import { X } from "lucide-react";
+import { 
   Form,
   FormField,
-  FormItem,
   FormLabel,
+  FormItem,
   FormControl,
-  FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { ScrollArea } from "../ui/scroll-area";
-import { X } from "lucide-react";
+  FormMessage
+} from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const CreateProject = () => {
   const [tasks, setTasks] = React.useState<string[]>([]);

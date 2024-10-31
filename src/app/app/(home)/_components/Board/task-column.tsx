@@ -2,7 +2,7 @@ import { FC, useState } from "react";
 import { Card }from "./kanban-board";
 import DropIndicator from "./drop-indicator";
 import TaskCard from "./card";
-import { ScrollArea } from "../ui/scroll-area";
+import { ScrollArea } from "../../../../../components/ui/scroll-area";
 import AddCard from "./add-card";
 
 interface ColumnProps {

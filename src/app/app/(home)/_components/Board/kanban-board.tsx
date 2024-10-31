@@ -2,6 +2,7 @@
 
 import React, { FC, useState } from "react";
 import Column from "./task-column";
+import { trpc } from "@/app/_trpc/client";
 
 export interface Card {
   title: string;
@@ -10,14 +11,16 @@ export interface Card {
 }
 
 interface ProjectTaskData {
-  data : Card[];
+  items : Card[];
 }
 
-const KanbanBoard:FC<ProjectTaskData> = ({ data }) => {
-  const [cards, setCards] = useState<Card[]>(data);
+const KanbanBoard:FC<ProjectTaskData> = ({ items }) => {
+  const [cards, setCards] = useState<Card[]>(items);
+
+  const { data }= trpc.hello.useQuery({ text : "hello"});
 
   return (
-    <div className="grid grid-cols-4 w-full  p-4">
+    <div className="grid grid-cols-4 w-full p-4">
       <Column
         title="TO-DO LIST"
         column="todo"
@@ -46,6 +49,8 @@ const KanbanBoard:FC<ProjectTaskData> = ({ data }) => {
         cards={cards}
         setCards={setCards}
       />
+
+     <p>{data?.greeting}</p>
     </div>
   );
 };

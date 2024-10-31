@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { ThemeProvider } from "@/components/ThemeProvider/theme-provider";
 import Header from "@/components/Header/header";
+import { TRPCProvider } from "./_trpc/Provider";
 
 export const metadata: Metadata = {
   title: "Kanban Board",
@@ -18,8 +19,10 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ThemeProvider>
-          <Header/>
-           {children}
+          <TRPCProvider>
+            <Header />
+            {children}
+          </TRPCProvider>
         </ThemeProvider>
       </body>
     </html>

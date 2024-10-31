@@ -1,9 +1,9 @@
-import KanbanBoard from "@/components/Board/kanban-board";
-import CreateProject from "@/components/Forms/create-form";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
+import CreateProject from "./_components/forms/create-form";
+import KanbanBoard from "./_components/Board/kanban-board";
 
-const DashBoard = () => {
+const Page = () => {
   const data = [
     {
       id: 1,
@@ -120,7 +120,7 @@ const DashBoard = () => {
         {data.length > 0 &&
           data.map((value) => (
             <TabsContent key={value.id} value={value.id.toString()}>
-              <KanbanBoard data={value.projectData} />
+              <KanbanBoard items={value.projectData} />
             </TabsContent>
           ))}
       </Tabs>
@@ -128,4 +128,4 @@ const DashBoard = () => {
   );
 };
 
-export default DashBoard;
+export default Page;
