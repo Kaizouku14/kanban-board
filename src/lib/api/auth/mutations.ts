@@ -1,7 +1,9 @@
+import { lucia } from "@/lib/auth/lucia";
 import dbConnection from "@/lib/db/dg-config";
 import { User }from "@/lib/db/schema/users";
 import { hashPassword, verifyPassword } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
+import { cookies } from "next/headers";
 
 interface ISignup {
   username: string;
@@ -24,7 +26,6 @@ export const signupUser = async ({ ...params }: ISignup) => {
 
   const hashedPassword = await hashPassword(password);
 
-  console.log(hashedPassword)
   const newUser = new User({ username, email, password: hashedPassword });
   await newUser.save();
 };
@@ -51,5 +52,10 @@ export const signinUser = async ({ ...params }) => {
     });
   }
 
+  const session = lucia.createSession(userFound.id, {});
+  const sessionCookies = lucia.createSessionCookie((await session).id);
+  cookies().set(lucia.sessionCookieName, sessionCookies.value, {
+    ...sessionCookies.attributes,
+  });
 
 };

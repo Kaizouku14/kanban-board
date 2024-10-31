@@ -4,16 +4,18 @@ import { cache } from "react";
 import { cookies } from "next/headers";
 
 export const lucia = new Lucia(adapter, {
-  sessionCookie: {
-    attributes: {
-      secure: process.env.NODE_ENV === "production",
+    sessionCookie: {
+        attributes: {
+            // Set the secure attribute for the session cookie if in production
+            secure: process.env.NODE_ENV === "production"
+        }
     },
-  },
-  getUserAttributes: (attributes) => {
-    return {
-      ...attributes,
-    };
-  },
+    getUserAttributes: (attributes) => {
+        // Return the user attributes as they are
+        return {
+            ...attributes
+        };
+    }
 });
 
 export const getSession = cache(

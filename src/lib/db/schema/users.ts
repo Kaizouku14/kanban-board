@@ -1,4 +1,5 @@
-import { Schema, model, models } from "mongoose";
+import mongoose, { Schema, model, models } from "mongoose";
+import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
 
 const userSchema = new Schema({
     username: {
@@ -15,6 +16,30 @@ const userSchema = new Schema({
     },
 });
 
-const User = models['kanban-users'] || model('kanban-users', userSchema);
+const sessionSchema = new Schema(
+    {
+        _id: {
+            type: String,
+            required: true
+        },
+        user_id: {
+            type: String,
+            required: true
+        },
+        expires_at: {
+            type: Date,
+            required: true
+        }
+    },
+    { _id: false }
+);
 
-export default User;
+const User = models['kanban-users'] || model('kanban-users', userSchema);
+const Session = models['sessions'] || model('sessions', sessionSchema);
+
+const adapter = new MongodbAdapter(
+    mongoose.connection.collection("sessions"),
+    mongoose.connection.collection("kanban-users") 
+);
+
+export { User, Session, adapter };

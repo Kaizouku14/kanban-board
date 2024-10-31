@@ -18,6 +18,7 @@ import { api } from "@/app/_trpc/client";
 import { toast } from "sonner";
 
 const SignInForm = () => {
+
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -37,7 +38,7 @@ const SignInForm = () => {
         return (error as Error).message;
       },
     });
-  }
+  } 
 
   return (
     <Form {...form}>
