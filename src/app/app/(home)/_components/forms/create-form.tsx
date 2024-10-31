@@ -1,6 +1,5 @@
 "use client";
 
-import { createFormSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import React from "react";
 import { useForm } from "react-hook-form";
@@ -17,6 +16,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { createFormSchema } from "../schema";
+
 
 const CreateProject = () => {
   const [tasks, setTasks] = React.useState<string[]>([]);

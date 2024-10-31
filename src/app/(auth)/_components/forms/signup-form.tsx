@@ -1,16 +1,23 @@
-"use client"
+"use client";
 
-import { signUpFormSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
-import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "@/components/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+  Form,
+} from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { api } from "@/app/_trpc/client";
+import { signUpFormSchema } from "../schema";
+import { toast } from "sonner";
 
 const SignUpForm = () => {
-
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -23,7 +30,15 @@ const SignUpForm = () => {
 
   const signupMutation = api.auth.signup.useMutation();
   function onSubmit(values: z.infer<typeof signUpFormSchema>) {
-    signupMutation.mutate(values);
+    toast.promise(signupMutation.mutateAsync(values), {
+      loading: "Registering...",
+      success: () => {
+        return "Registered successfully.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
   }
 
   return (

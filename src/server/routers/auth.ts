@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { publicProcedure, createTRPCRouter  } from '../trpc';
+import { signupUser } from '@/lib/api/auth/mutations';
 
 export const authRouter = createTRPCRouter({
   signup: publicProcedure
@@ -13,13 +14,10 @@ export const authRouter = createTRPCRouter({
         password: z
           .string()
           .min(6),
-        confirmPassword: z
-          .string()
-          .min(6),
       })
     )
     .mutation(async ({ input }) => {
-        console.log(input)
+       return await signupUser(input);
     }),
 });
 

@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form"
+import { useForm } from "react-hook-form";
 import { z } from "zod";
 import {
   FormControl,
@@ -15,9 +15,7 @@ import {
 } from "@/components/ui/form";
 import { signInFormSchema } from "../schema";
 
-
 const SignInForm = () => {
-  
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
@@ -60,7 +58,9 @@ const SignInForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">Sign in</Button>
+        <Button className="w-full" type="submit">
+          Sign in
+        </Button>
       </form>
     </Form>
   );

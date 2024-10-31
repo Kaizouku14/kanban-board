@@ -4,6 +4,7 @@ import "./globals.css";
 import { ThemeProvider } from "@/components/ThemeProvider/theme-provider";
 import Header from "@/components/Header/header";
 import { TRPCProvider } from "./_trpc/Provider";
+import { Toaster } from "sonner";
 
 export const metadata: Metadata = {
   title: "Kanban Board",
@@ -23,6 +24,16 @@ export default function RootLayout({
             <Header />
             {children}
           </TRPCProvider>
+          <Toaster
+              toastOptions={{
+                classNames: {
+                  warning: "bg-yellow-500 text-white",
+                  error: "bg-red-500 text-white",
+                  info: "bg-seagull-500 text-white",
+                  success: "bg-green-500 text-white",
+                },
+              }}
+            />
         </ThemeProvider>
       </body>
     </html>
