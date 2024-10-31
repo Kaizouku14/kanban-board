@@ -14,6 +14,8 @@ import {
   Form,
 } from "@/components/ui/form";
 import { signInFormSchema } from "../schema";
+import { api } from "@/app/_trpc/client";
+import { toast } from "sonner";
 
 const SignInForm = () => {
   const form = useForm<z.infer<typeof signInFormSchema>>({
@@ -24,8 +26,17 @@ const SignInForm = () => {
     },
   });
 
+  const signinMutation = api.auth.signin.useMutation();
   function onSubmit(values: z.infer<typeof signInFormSchema>) {
-    console.log(values);
+    toast.promise(signinMutation.mutateAsync(values), {
+      loading: "Logging in...",
+      success: () => {
+        return "Login successfully.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
   }
 
   return (

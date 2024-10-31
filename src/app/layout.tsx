@@ -25,6 +25,7 @@ export default function RootLayout({
             {children}
           </TRPCProvider>
           <Toaster
+              position="top-center"
               toastOptions={{
                 classNames: {
                   warning: "bg-yellow-500 text-white",

@@ -1,27 +1,52 @@
-import { ISignup } from "@/interface/ISignup";
 import dbConnection from "@/lib/db/dg-config";
-import CreateUser from "@/lib/db/schema/sign-up";
+import User from "@/lib/db/schema/sign-up";
+import { hashPassword, verifyPassword } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 
-export const signupUser = async ({ ...props }: ISignup) => {
-  const { username, email, password } = props;
+interface ISignup {
+  username: string;
+  email: string;
+  password: string;
+}
 
-    dbConnection();
+export const signupUser = async ({ ...params }: ISignup) => {
+  const { username, email, password } = params;
 
-    const userFound = await CreateUser.findOne({ email });
-    if (userFound) {
-        throw new TRPCError({
-        code: "NOT_FOUND",
-        message: `Email already in use!`,
-        });
-    }
+  dbConnection();
 
-    const newUser = new CreateUser({ username, email, password });
-    await newUser.save();
+  const userFound = await User.findOne({ email });
+  if (userFound) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Email already in use!`,
+    });
+  }
 
-    if (newUser) {
-        console.log("User created successfully");
-      } else {
-        console.log("User creation failed");
-      }
+  const hashedPassword = await hashPassword(password);
+  const newUser = new User({ username, email, password: hashedPassword });
+  await newUser.save();
+};
+
+export const signinUser = async ({ ...params }) => {
+  dbConnection();
+
+  const { email, password } = params;
+
+  const userFound = await User.findOne({ email });
+  if (!userFound) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Invalid email, please try again.",
+    });
+  }
+
+  const passwordMatched = await verifyPassword(userFound.password, password);
+
+  if (!passwordMatched) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: "Incorrect password, please try again.",
+    });
+  }
+
 };
