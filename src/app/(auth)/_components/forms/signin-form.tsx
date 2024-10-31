@@ -1,19 +1,20 @@
 "use client";
 
-import { signInFormSchema } from "@/lib/form-schema";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form"
-import { Input } from "../../../../components/ui/input";
 import { z } from "zod";
-import { Button } from "../../../../components/ui/button";
 import {
-  Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-} from "../../../../components/ui/form";
+  Form,
+} from "@/components/ui/form";
+import { signInFormSchema } from "../schema";
+
 
 const SignInForm = () => {
   
