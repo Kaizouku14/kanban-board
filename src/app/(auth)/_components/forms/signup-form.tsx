@@ -1,21 +1,16 @@
-"use client";
+"use client"
 
 import { signUpFormSchema } from "@/lib/form-schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { Input } from "../../../../components/ui/input";
 import { z } from "zod";
-import { Button } from "../../../../components/ui/button";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "../../../../components/ui/form";
+import { Input } from "@/components/ui/input";
+import { FormControl, FormField, FormItem, FormLabel, FormMessage, Form } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { api } from "@/app/_trpc/client";
 
 const SignUpForm = () => {
+
   const form = useForm<z.infer<typeof signUpFormSchema>>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -26,8 +21,9 @@ const SignUpForm = () => {
     },
   });
 
+  const signupMutation = api.auth.signup.useMutation();
   function onSubmit(values: z.infer<typeof signUpFormSchema>) {
-    console.log(values);
+    signupMutation.mutate(values);
   }
 
   return (

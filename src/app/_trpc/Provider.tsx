@@ -5,7 +5,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { httpBatchLink } from "@trpc/client";
 import { useState } from "react";
 import { makeQueryClient } from "./query-client";
-import { trpc } from "./client";
+import { api } from "./client";
 
 let clientQueryClientSingleton: QueryClient;
 function getQueryClient() {
@@ -39,7 +39,7 @@ export function TRPCProvider(
     const queryClient = getQueryClient();
 
     const [trpcClient] = useState(() =>
-        trpc.createClient({
+        api.createClient({
             links: [
                 httpBatchLink({
                     // transformer: superjson, <-- if you use a data transformer
@@ -50,10 +50,10 @@ export function TRPCProvider(
     );
 
     return (
-        <trpc.Provider client={trpcClient} queryClient={queryClient}>
+        <api.Provider client={trpcClient} queryClient={queryClient}>
             <QueryClientProvider client={queryClient}>
                 {props.children}
             </QueryClientProvider>
-        </trpc.Provider>
+        </api.Provider>
     );
 }

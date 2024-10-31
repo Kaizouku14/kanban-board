@@ -1,6 +1,4 @@
 
-import SignInForm from "@/app/(auth)/_components/forms/signin-form";
-import SignUpForm from "@/app/(auth)/_components/forms/signup-form";
 import {
   Card,
   CardContent,
@@ -8,9 +6,11 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import SignInForm from "../_components/forms/signin-form";
+import SignUpForm from "../_components/forms/signup-form";
 
 const Page = () => {
-  
+
   return (
     <div className="flex justify-center">
         <Tabs defaultValue="signin" className="w-[400px]">
