@@ -1,8 +1,6 @@
 import { appRouter } from '@/server/root';
 import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 
-
-
 function handler(req: Request) {
   return fetchRequestHandler({
     endpoint: '/api/trpc',

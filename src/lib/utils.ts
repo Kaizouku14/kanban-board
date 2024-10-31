@@ -8,8 +8,10 @@ export function cn(...inputs: ClassValue[]) {
 
 export const hashPassword = async (plainPassword: string): Promise<string> => {
   try {
-    const saltRounds = process.env.SALT_ROUNDS!;
-    const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+    const salt = await bcrypt.genSalt(
+      Number.parseInt(process.env.SALT_ROUNDS || "10", 10)
+    );
+    const hashedPassword = await bcrypt.hash(plainPassword, salt);
     return hashedPassword;
   } catch (error: unknown) {
     console.log((error as Error).message);

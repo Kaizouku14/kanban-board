@@ -1,5 +1,5 @@
 import dbConnection from "@/lib/db/dg-config";
-import User from "@/lib/db/schema/sign-up";
+import { User }from "@/lib/db/schema/users";
 import { hashPassword, verifyPassword } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 
@@ -23,6 +23,8 @@ export const signupUser = async ({ ...params }: ISignup) => {
   }
 
   const hashedPassword = await hashPassword(password);
+
+  console.log(hashedPassword)
   const newUser = new User({ username, email, password: hashedPassword });
   await newUser.save();
 };
@@ -48,5 +50,6 @@ export const signinUser = async ({ ...params }) => {
       message: "Incorrect password, please try again.",
     });
   }
+
 
 };
