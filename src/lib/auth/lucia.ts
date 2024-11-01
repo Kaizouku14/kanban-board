@@ -1,21 +1,21 @@
-import { adapter } from "../db/schema/users";
+import { adapter, SessionSchema } from "../db/schema/users";
 import { Lucia, type Session, type User } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
 
 export const lucia = new Lucia(adapter, {
-    sessionCookie: {
-        attributes: {
-            // Set the secure attribute for the session cookie if in production
-            secure: process.env.NODE_ENV === "production"
-        }
+  sessionCookie: {
+    attributes: {
+      // Set the secure attribute for the session cookie if in production
+      secure: process.env.NODE_ENV === "production",
     },
-    getUserAttributes: (attributes) => {
-        // Return the user attributes as they are
-        return {
-            ...attributes
-        };
-    }
+  },
+  getUserAttributes: (attributes) => {
+    // Return the user attributes as they are
+    return {
+      ...attributes,
+    };
+  },
 });
 
 export const getSession = cache(
@@ -25,7 +25,7 @@ export const getSession = cache(
     // Retrieve the session ID from the cookies
     const sessionId = cookies().get(lucia.sessionCookieName)?.value ?? null;
 
-    // If no session ID is found, return null for both user and session
+    // If no session ID is found, return null for bo  th user and session
     if (!sessionId) {
       return {
         user: null,
@@ -33,8 +33,12 @@ export const getSession = cache(
       };
     }
 
+     const session = await SessionSchema.findOne({ _id : sessionId })
+     console.log("Session ", session);
+
     // Validate the session using the session ID
     const result = await lucia.validateSession(sessionId);
+    console.log("Result", result)
 
     try {
       // If the session is still fresh (valid), create a new session cookie
@@ -57,7 +61,6 @@ export const getSession = cache(
         );
       }
     } catch (err) {
-      // Log any errors that occur during session handling
       console.log(err);
     }
 

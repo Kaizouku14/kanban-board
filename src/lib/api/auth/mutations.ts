@@ -1,5 +1,4 @@
 import { lucia } from "@/lib/auth/lucia";
-import dbConnection from "@/lib/db/dg-config";
 import { User }from "@/lib/db/schema/users";
 import { hashPassword, verifyPassword } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
@@ -13,8 +12,6 @@ interface ISignup {
 
 export const signupUser = async ({ ...params }: ISignup) => {
   const { username, email, password } = params;
-
-  dbConnection();
 
   const userFound = await User.findOne({ email });
   if (userFound) {
@@ -31,7 +28,6 @@ export const signupUser = async ({ ...params }: ISignup) => {
 };
 
 export const signinUser = async ({ ...params }) => {
-  dbConnection();
 
   const { email, password } = params;
 
@@ -52,10 +48,14 @@ export const signinUser = async ({ ...params }) => {
     });
   }
 
-  const session = lucia.createSession(userFound.id, {});
-  const sessionCookies = lucia.createSessionCookie((await session).id);
+  const session = await lucia.createSession(userFound.id, {});
+
+  const sessionCookies = lucia.createSessionCookie(session.id);
   cookies().set(lucia.sessionCookieName, sessionCookies.value, {
     ...sessionCookies.attributes,
   });
 
+  // console.log("Login session", session)
+  // console.log("Cookie session",sessionCookies)
+  
 };
