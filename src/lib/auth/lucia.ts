@@ -1,7 +1,10 @@
-import { adapter, SessionSchema } from "../db/schema/users";
 import { Lucia, type Session, type User } from "lucia";
 import { cache } from "react";
 import { cookies } from "next/headers";
+import { DrizzlePostgreSQLAdapter } from "@lucia-auth/adapter-drizzle";
+import { db, sessions, users } from "../db/schema/users";
+
+const adapter = new DrizzlePostgreSQLAdapter(db, sessions, users);
 
 export const lucia = new Lucia(adapter, {
   sessionCookie: {
@@ -32,10 +35,7 @@ export const getSession = cache(
         session: null,
       };
     }
-
-     const session = await SessionSchema.findOne({ _id : sessionId })
-     console.log("Session ", session);
-
+ 
     // Validate the session using the session ID
     const result = await lucia.validateSession(sessionId);
     console.log("Result", result)

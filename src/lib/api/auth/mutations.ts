@@ -1,19 +1,26 @@
 import { lucia } from "@/lib/auth/lucia";
-import { User }from "@/lib/db/schema/users";
+import { db, users, eq } from "@/lib/db/schema/users";
 import { hashPassword, verifyPassword } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
+import { generateIdFromEntropySize } from "lucia";
 import { cookies } from "next/headers";
 
-interface ISignup {
+interface User {
   username: string;
   email: string;
   password: string;
 }
 
-export const signupUser = async ({ ...params }: ISignup) => {
+export const signupUser = async ({ ...params }: User) => {
   const { username, email, password } = params;
 
-  const userFound = await User.findOne({ email });
+  const [userFound] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+    .execute();
+
   if (userFound) {
     throw new TRPCError({
       code: "NOT_FOUND",
@@ -22,22 +29,33 @@ export const signupUser = async ({ ...params }: ISignup) => {
   }
 
   const hashedPassword = await hashPassword(password);
+  const userId = generateIdFromEntropySize(16);
 
-  const newUser = new User({ username, email, password: hashedPassword });
-  await newUser.save();
+  await db.insert(users).values({
+    id: userId,
+    username,
+    email,
+    password: hashedPassword,
+  });
 };
 
 export const signinUser = async ({ ...params }) => {
-
   const { email, password } = params;
 
-  const userFound = await User.findOne({ email });
+  const [userFound] = await db
+    .select()
+    .from(users)
+    .where(eq(users.email, email))
+    .limit(1)
+    .execute();
+
   if (!userFound) {
     throw new TRPCError({
       code: "NOT_FOUND",
       message: "Invalid email, please try again.",
     });
   }
+
 
   const passwordMatched = await verifyPassword(userFound.password, password);
 
@@ -54,8 +72,4 @@ export const signinUser = async ({ ...params }) => {
   cookies().set(lucia.sessionCookieName, sessionCookies.value, {
     ...sessionCookies.attributes,
   });
-
-  // console.log("Login session", session)
-  // console.log("Cookie session",sessionCookies)
-  
 };

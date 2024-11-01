@@ -1,53 +1,28 @@
-import mongoose, { Schema, model, models } from "mongoose";
-import { MongodbAdapter } from "@lucia-auth/adapter-mongodb";
+import { drizzle } from "drizzle-orm/neon-http";
+import { neon } from "@neondatabase/serverless";
+import { pgTable, timestamp, text } from "drizzle-orm/pg-core";
 
-mongoose.connect(process.env.MONGODB_URI as string)
-  .then(() => {
-    console.log("database connected succesfully");
-  })
-  .catch(() => {
-    console.log("database connection failed");
-  })
-;
+const sqlDb = neon(process.env.DATABASE_URL!);
+export const db = drizzle({ client: sqlDb });
 
-const User = models.User || model(
-  "User",
-  new Schema({
-    username: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-  })
-);
+export const users = pgTable("users", {
+  id: text("id").primaryKey(),
+  username: text("username").notNull(),
+  email: text("email").notNull().unique(),
+  password: text("password").notNull(),
+});
 
-const SessionSchema = models.Session || model(
-  "Session",
-  new Schema(
-    {
-      user_id: {
-        type: String,
-        required: true,
-      },
-      expires_at: {
-        type: Date,
-        required: true,
-      },
-    },
-  )
-);
+export const sessions = pgTable("sessions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  expiresAt: timestamp("expires_at", {
+    withTimezone: true,
+    mode: "date",
+  }).notNull(),
+});
 
-// Create the MongoDB adapter
-const adapter = new MongodbAdapter(
-  mongoose.connection.collection("sessions"),      
-  mongoose.connection.collection("users")   
-);
-
-export { User, SessionSchema, adapter };
+export type UserTable = typeof users;
+export type SessionTable = typeof sessions;
+export * from "drizzle-orm";
