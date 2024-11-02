@@ -1,51 +1,50 @@
-"use client"
+"use client";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus } from "lucide-react";
 import CreateProject from "./_components/forms/create-form";
 import KanbanBoard from "./_components/Board/kanban-board";
 import { api } from "@/app/_trpc/client";
+import { Task } from "@/interface/ITask";
 
 const Page = () => {
-  const { data , error , isLoading }= api.kanban.projects.useQuery();
+  const { data, error, isLoading } = api.kanban.projects.useQuery();
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
-  if(!data) return <div>No data</div>;
- 
+
+  console.log(data)
   return (
     <div className="flex">
       <Tabs defaultValue="add" className="w-full flex flex-col gap-y-1.5">
-        <TabsList className="grid grid-cols-4 grid-flow-row  items-center w-fit h-auto gap-2">
-          {data.projects.length > 0 &&
-            data.projects.map((value) => (
+
+       {data && (
+         <TabsList className={`grid ${data.length > 0 ? "grid-cols-4" : "flex justify-center"} grid-flow-row items-center w-fit h-auto gap-2`}>
+            {data?.map((value) => (
               <TabsTrigger
                 key={value.id}
                 value={value.id.toString()}
                 className="px-12 flex items-center"
               >
-                {value.projectName}
+                {value.title}
               </TabsTrigger>
             ))}
-
-          <TabsTrigger value={"add"}>
-            <Plus
-              className="text-secondary bg-primary rounded-full"
-              size={20}
-            />
-          </TabsTrigger>
-        </TabsList>
+            <TabsTrigger value="add">
+              <Plus className="text-secondary bg-primary rounded-full " size={20} />
+            </TabsTrigger>
+          </TabsList>
+        )}
 
         <TabsContent value="add" className="flex justify-center ">
           <CreateProject />
         </TabsContent>
 
         {/* Data Content */}
-        {data.projects.length > 0 &&
-          data.projects.map((value) => (
+        {data &&
+          data.map((value) => (
             <TabsContent key={value.id} value={value.id.toString()}>
-              <KanbanBoard items={value.projectData} />
+              <KanbanBoard items={value.data as Task[]} />
             </TabsContent>
           ))}
       </Tabs>

@@ -17,12 +17,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { createFormSchema } from "../schema";
-
+import { api } from "@/app/_trpc/client";
+import { toast } from "sonner";
+import { Task } from "@/interface/ITask";
 
 const CreateProject = () => {
-  const [tasks, setTasks] = React.useState<string[]>([]);
+  const [tasks, setTasks] = React.useState<Task[]>([]);
   const [taskInput, setTaskInput] = React.useState("");
-
+  
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
     defaultValues: {
@@ -30,14 +32,27 @@ const CreateProject = () => {
     },
   });
 
+  const createMutation = api.kanban.createProject.useMutation();
   function onSubmit(values: z.infer<typeof createFormSchema>) {
-    console.log(values);
-    console.log(tasks)
+    toast.promise(createMutation.mutateAsync({
+      title: values.projectName,
+      tasks : tasks
+    }), {
+      loading: "Creating project...",
+      success: () => {
+        return "Project created successfully.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
   }
 
   function addTask(task: string) {
     if (task.trim()) {
-      setTasks([...tasks, task]);
+      const taskId = task.length + 1;
+      const newTask: Task = { id: taskId.toString(), title: task, column: 'todo' };
+      setTasks((prevTasks) => [...prevTasks, newTask]);
       setTaskInput("");
     }
   }
@@ -91,7 +106,7 @@ const CreateProject = () => {
                   key={index}
                   className="flex items-center justify-between gap-x-2 border border-gray-200 rounded-lg p-2 w-full h-10 "
                 >
-                  <span className="truncate">{task}</span>
+                  <span className="truncate">{task.title}</span>
                   <button
                     className="text-red-500 hover:text-red-700 focus:outline-none"
                     onClick={() => removeTask(index)}

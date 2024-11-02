@@ -2,12 +2,7 @@
 
 import React, { FC, useState } from "react";
 import Column from "./task-column";
-
-export interface Task {
-  id: string;
-  title: string;
-  column: "todo" | "in-progress" | "validate" | "done";
-}
+import { Task } from "@/interface/ITask";
 
 interface ProjectTaskData {
   items : Task[];
@@ -16,6 +11,7 @@ interface ProjectTaskData {
 const KanbanBoard:FC<ProjectTaskData> = ({ items }) => {
   const [cards, setCards] = useState<Task[]>(items);
 
+  console.log(cards)
 
   return (
     <div className="grid grid-cols-4 w-full p-4">

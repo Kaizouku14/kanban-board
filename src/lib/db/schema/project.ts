@@ -1,12 +1,10 @@
-import { jsonb, pgTable, text } from "drizzle-orm/pg-core";
+import { jsonb, pgTable, serial, text } from "drizzle-orm/pg-core";
 import { users } from "./users";
 
 export const project = pgTable("projects", { 
-    id: text("id").primaryKey(),
+    id: serial("id").primaryKey(),
     title: text("project_name").notNull(),
-    userId: text("user_id")
-    .notNull()
-    .references(() => users.id),
+    userId: text("user_id").references(() => users.id),
     data: jsonb("project_data").notNull(),
 })
 

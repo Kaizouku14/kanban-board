@@ -1,16 +1,16 @@
 import { FC, useState } from "react";
-import { Card }from "./kanban-board";
 import DropIndicator from "./drop-indicator";
 import TaskCard from "./card";
-import { ScrollArea } from "../../../../../components/ui/scroll-area";
 import AddCard from "./add-card";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Task } from "@/interface/ITask";
 
 interface ColumnProps {
   title: string;
   headingColor: string;
   column: string;
-  cards: Card[];
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+  cards: Task[];
+  setCards: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 const Column: FC<ColumnProps> = ({
@@ -22,7 +22,7 @@ const Column: FC<ColumnProps> = ({
 }) => {
   const [active, setActive] = useState(false);
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, card: Card) => {
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, card: Task) => {
     e.dataTransfer.setData("cardId", card.id);
 
     console.log(card.id)
