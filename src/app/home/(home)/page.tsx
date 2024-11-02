@@ -13,14 +13,15 @@ const Page = () => {
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
 
-
-  console.log(data)
   return (
     <div className="flex">
       <Tabs defaultValue="add" className="w-full flex flex-col gap-y-1.5">
-
-       {data && (
-         <TabsList className={`grid ${data.length > 0 ? "grid-cols-4" : "flex justify-center"} grid-flow-row items-center w-fit h-auto gap-2`}>
+        {data && (
+          <TabsList
+            className={`grid ${
+              data.length > 0 ? "grid-cols-4" : "flex justify-center"
+            } grid-flow-row items-center w-fit h-auto gap-2`}
+          >
             {data?.map((value) => (
               <TabsTrigger
                 key={value.id}
@@ -31,7 +32,10 @@ const Page = () => {
               </TabsTrigger>
             ))}
             <TabsTrigger value="add">
-              <Plus className="text-secondary bg-primary rounded-full " size={20} />
+              <Plus
+                className="text-secondary bg-primary rounded-full "
+                size={20}
+              />
             </TabsTrigger>
           </TabsList>
         )}
@@ -44,7 +48,7 @@ const Page = () => {
         {data &&
           data.map((value) => (
             <TabsContent key={value.id} value={value.id.toString()}>
-              <KanbanBoard items={value.data as Task[]} />
+              <KanbanBoard projectId={value.id} items={value.data as Task[]} />
             </TabsContent>
           ))}
       </Tabs>

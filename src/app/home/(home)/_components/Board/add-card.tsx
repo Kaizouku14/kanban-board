@@ -3,17 +3,21 @@
 import { FC, FormEvent, useState } from "react";
 import { motion } from "framer-motion"
 import { Plus } from "lucide-react";
-import { Card } from "./kanban-board";
+import { Task } from "@/interface/ITask";
+import { api } from "@/app/_trpc/client";
+import { toast } from "sonner";
 
 interface AddCardProps {
+  projectId : number;
   column: string;
-  setCards: React.Dispatch<React.SetStateAction<Card[]>>;
+  setCards: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
-const AddCard:FC<AddCardProps> = ({ column, setCards }) => {
+const AddCard:FC<AddCardProps> = ({ projectId, column, setCards }) => {
   const [text, setText] = useState("");
   const [adding, setAdding] = useState(false);
 
+  const addTaskMutation = api.kanban.addTask.useMutation();
   const handleSubmit = (e : FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -22,10 +26,23 @@ const AddCard:FC<AddCardProps> = ({ column, setCards }) => {
     const newCard = {
       column,
       title: text.trim(),
-      id: Math.random().toString(),
+      id: Math.floor(Math.random() * 10000).toString(),
     };
 
     setCards((prev) => [...prev, newCard]);
+
+    toast.promise(addTaskMutation.mutateAsync({
+      projectId : projectId,
+      task : newCard
+    }), {
+      loading: "Creating task...",
+      success: () => {
+        return "task created successfully.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
     setAdding(false);
   };
 

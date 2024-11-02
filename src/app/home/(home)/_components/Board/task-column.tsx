@@ -6,6 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Task } from "@/interface/ITask";
 
 interface ColumnProps {
+  projectId : number;
   title: string;
   headingColor: string;
   column: string;
@@ -14,6 +15,7 @@ interface ColumnProps {
 }
 
 const Column: FC<ColumnProps> = ({
+  projectId,
   title,
   headingColor,
   cards,
@@ -119,7 +121,7 @@ const Column: FC<ColumnProps> = ({
   };
 
   const filteredCards = cards.filter((c) => c.column === column);
-
+   
   return (
     <div className="w-72 shrink-0">
       <div className="mb-3 flex items-center justify-between px-2.5 ">
@@ -141,7 +143,7 @@ const Column: FC<ColumnProps> = ({
             return <TaskCard key={c.id} {...c} handleDragStart={handleDragStart} />;
           })}
           <DropIndicator beforeId={null} column={column} />
-          <AddCard column={column} setCards={setCards} />
+          <AddCard projectId={projectId} column={column} setCards={setCards} />
         </div>
       </ScrollArea>
     </div>

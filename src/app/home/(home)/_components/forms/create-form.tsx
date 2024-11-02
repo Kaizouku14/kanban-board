@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { X } from "lucide-react";
@@ -22,8 +22,8 @@ import { toast } from "sonner";
 import { Task } from "@/interface/ITask";
 
 const CreateProject = () => {
-  const [tasks, setTasks] = React.useState<Task[]>([]);
-  const [taskInput, setTaskInput] = React.useState("");
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskInput, setTaskInput] = useState("");
   
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
@@ -40,6 +40,7 @@ const CreateProject = () => {
     }), {
       loading: "Creating project...",
       success: () => {
+        setTasks([]);
         return "Project created successfully.";
       },
       error: (error: unknown) => {
@@ -50,10 +51,10 @@ const CreateProject = () => {
 
   function addTask(task: string) {
     if (task.trim()) {
-      const taskId = task.length + 1;
-      const newTask: Task = { id: taskId.toString(), title: task, column: 'todo' };
+      const randomId = Math.floor(Math.random() * 10000);
+      const newTask: Task = { id: randomId.toString(), title: task, column: 'todo' };
       setTasks((prevTasks) => [...prevTasks, newTask]);
-      setTaskInput("");
+      setTaskInput(""); 
     }
   }
 

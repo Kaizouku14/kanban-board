@@ -5,7 +5,7 @@ export const project = pgTable("projects", {
     id: serial("id").primaryKey(),
     title: text("project_name").notNull(),
     userId: text("user_id").references(() => users.id),
-    data: jsonb("project_data").notNull(),
+    data: jsonb("project_data"),
 })
 
 export type projectTable = typeof project;

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, protectedProcedure, publicProcedure } from "../trpc";
 import { getAllProjects } from "@/lib/api/kanban/queries";
-import { createProject } from "@/lib/api/kanban/mutations";
+import { createProject, createTask } from "@/lib/api/kanban/mutations";
 
 const taskSchema = z.object({
   id: z.string().min(1), 
@@ -28,6 +28,20 @@ export const kanbanRouter = createTRPCRouter({
         tasks: input.tasks ?? [],
        });
     }),
+
+   addTask : protectedProcedure
+     .input(
+        z.object({
+            projectId : z.number().int(),
+            task : taskSchema,
+        })
+     )
+     .mutation(({ input }) => {
+        return createTask({
+            projectId : input.projectId,
+            task : input.task,
+        })
+     })
 });
 
 export type kanbanRouter = typeof kanbanRouter;
