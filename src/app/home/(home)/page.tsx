@@ -22,7 +22,7 @@ const Page = () => {
           <TabsList
             className={`grid ${
               data.length > 0 ? "grid-cols-4" : "flex justify-center"
-            } grid-flow-row items-center w-fit h-auto gap-2`}
+            } grid-flow-row items-center w-full h-auto gap-2`}
           >
             {data?.map((value) => (
               <TabsTrigger
