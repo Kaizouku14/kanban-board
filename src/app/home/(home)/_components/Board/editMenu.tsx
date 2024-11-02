@@ -1,19 +1,44 @@
+import { api } from "@/app/_trpc/client";
+import { Button } from "@/components/ui/button";
 import {
   ContextMenu,
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { Task } from "@/interface/ITask";
 import { Grip, Trash2Icon, Pencil } from "lucide-react";
-
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
+import { toast } from "sonner";
 
 interface EditMenuProps {
+  taskId: string;
   title: string;
-  projectId : number;
+  projectId: number;
+  setCards: Dispatch<SetStateAction<Task[]>>;
 }
 
 export const EditMenu = ({ ...props }: EditMenuProps) => {
+
+  const deleteTaskMutation = api.kanban.deleteTask.useMutation();
+  const handleDeleteTask = () => {    
+    const { projectId, taskId , setCards} = props;
+
+    setCards((pv) => pv.filter((c) => c.id !== taskId));
+    toast.promise(deleteTaskMutation.mutateAsync({
+      projectId : projectId,
+      taskId : taskId
+    }), {
+      loading: "Saving changes...",
+      success: () => {
+        return "Changes save successfully.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
+  }
+
   return (
     <ContextMenu>
       <ContextMenuTrigger>
@@ -30,14 +55,20 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
           <Grip strokeWidth={1} size={16} />
         </div>
       </ContextMenuTrigger>
-      <ContextMenuContent className="p-2 rounded-md shadow-md">
-        <ContextMenuItem className="flex items-center gap-x-3 px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer">
-          <Pencil strokeWidth={1} size={16} />
-          <span className="text-sm">Edit</span>
+      <ContextMenuContent className="p-2 rounded-md shadow-md ">
+        <ContextMenuItem>
+          <Button className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary">
+            <Pencil strokeWidth={1} size={16} />
+            <span className="text-sm">Edit</span>
+          </Button>
         </ContextMenuItem>
-        <ContextMenuItem className="flex items-center gap-x-3 px-4 py-2 hover:bg-gray-100 rounded-md cursor-pointer">
-          <Trash2Icon strokeWidth={1} size={16} />
-          <span className="text-sm">Delete</span>
+        <ContextMenuItem>
+          <Button className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+            onClick={handleDeleteTask}
+          >
+            <Trash2Icon strokeWidth={1} size={16} />
+            <span className="text-sm">Delete</span>
+          </Button>
         </ContextMenuItem>
       </ContextMenuContent>
     </ContextMenu>

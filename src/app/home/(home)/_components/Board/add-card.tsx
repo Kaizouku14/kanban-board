@@ -35,9 +35,9 @@ const AddCard:FC<AddCardProps> = ({ projectId, column, setCards }) => {
       projectId : projectId,
       task : newCard
     }), {
-      loading: "Creating task...",
+      loading: "Saving changes...",
       success: () => {
-        return "task created successfully.";
+        return "Changes save successfully.";
       },
       error: (error: unknown) => {
         return (error as Error).message;

@@ -8,7 +8,7 @@ import { api } from "@/app/_trpc/client";
 import { toast } from "sonner";
 
 interface ColumnProps {
-  projectId : number;
+  projectId: number;
   title: string;
   headingColor: string;
   column: string;
@@ -52,7 +52,7 @@ const Column: FC<ColumnProps> = ({
       udpateData(cardToTransfer.id, cardToTransfer.column);
 
       if (moveToBack) {
-        copy.push(cardToTransfer);  
+        copy.push(cardToTransfer);
       } else {
         const insertAtIndex = copy.findIndex((el) => el.id === before);
         if (insertAtIndex === -1) return;
@@ -62,24 +62,26 @@ const Column: FC<ColumnProps> = ({
     }
   };
 
-  const updateTaskMutation = api.kanban.updateTask.useMutation();
-  const udpateData = async (id : string, column : string) => {
-
+  const updateTaskMutation = api.kanban.savedChanges.useMutation();
+  const udpateData = async (id: string, column: string) => {
     const projectTaskID = projectId;
-    toast.promise(updateTaskMutation.mutateAsync({
-      projectId : projectTaskID,
-      id : id,
-      column : column,
-    }), {
-      loading: "Saving changes...",
-      success: () => {
-        return "Saved.";
-      },
-      error: (error: unknown) => {
-        return (error as Error).message;
-      },
-    });
-  }
+    toast.promise(
+      updateTaskMutation.mutateAsync({
+        projectId: projectTaskID,
+        id: id,
+        column: column,
+      }),
+      {
+        loading: "Saving changes...",
+        success: () => {
+          return "Saved.";
+        },
+        error: (error: unknown) => {
+          return (error as Error).message;
+        },
+      }
+    );
+  };
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
@@ -141,7 +143,7 @@ const Column: FC<ColumnProps> = ({
   };
 
   const filteredCards = cards.filter((c) => c.column === column);
-   
+
   return (
     <div className="w-72 shrink-0">
       <div className="mb-3 flex items-center justify-between px-2.5 ">
@@ -160,7 +162,15 @@ const Column: FC<ColumnProps> = ({
           }`}
         >
           {filteredCards.map((c) => {
-            return <TaskCard key={c.id} {...c} handleDragStart={handleDragStart} />;
+            return (
+              <TaskCard
+                key={c.id}
+                {...c}
+                handleDragStart={handleDragStart}
+                projectId={projectId}
+                setCards={setCards}
+              />
+            );
           })}
           <DropIndicator beforeId={null} column={column} />
           <AddCard projectId={projectId} column={column} setCards={setCards} />

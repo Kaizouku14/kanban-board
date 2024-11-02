@@ -9,6 +9,23 @@ interface Project {
   tasks: Task[];
 }
 
+const fetchProject = async (projectId: number) => {
+  const [existingProject] = await db
+    .select()
+    .from(project)
+    .where(eq(project.id, projectId))
+    .execute();
+
+  if (!existingProject) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Project Not found`,
+    });
+  }
+
+  return existingProject;
+};
+
 export const createProject = async ({ ...props }: Project) => {
   const { title, userId, tasks } = props;
 
@@ -20,11 +37,11 @@ export const createProject = async ({ ...props }: Project) => {
     .execute();
 
   if (existingProject) {
-    const updatedTask = [...(existingProject.data as Task[]), tasks];
+    const updatedTasks = [...(existingProject.data as Task[]), ...tasks]; 
 
     return await db
       .update(project)
-      .set({ data: updatedTask })
+      .set({ data: updatedTasks })
       .where(eq(project.title, title))
       .execute();
   }
@@ -39,6 +56,17 @@ export const createProject = async ({ ...props }: Project) => {
     .execute();
 };
 
+export const deleteProject = async (projectId : number) => {
+  const existingProject = await fetchProject(projectId);
+
+  if(existingProject){
+    await db
+       .delete(project)
+       .where(eq(project.id, projectId))
+       .execute();
+  }
+}
+
 export const createTask = async ({
   projectId,
   task,
@@ -46,24 +74,13 @@ export const createTask = async ({
   projectId: number;
   task: Task;
 }) => {
-  const [existingProject] = await db
-    .select()
-    .from(project)
-    .where(eq(project.id, projectId))
-    .execute();
-
-  if (!existingProject) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `Project Not found`,
-    });
-  }
-
-  const updatedTask = [...(existingProject.data as Task[]), task];
+  const existingProject = await fetchProject(projectId);
+  
+  const updatedTasks = [...(existingProject.data as Task[]), task];
 
   await db
     .update(project)
-    .set({ data: updatedTask })
+    .set({ data: updatedTasks })
     .where(eq(project.id, projectId))
     .execute();
 };
@@ -77,21 +94,9 @@ export const savedChanges = async ({
   id: string;
   column: string;
 }) => {
-
-  const [existingProject] = await db
-    .select()
-    .from(project)
-    .where(eq(project.id, projectId))
-    .execute();
-
-  if (!existingProject) {
-    throw new TRPCError({
-      code: "NOT_FOUND",
-      message: `Project Not found`,
-    });
-  }
-
-  const updatedTask = (existingProject.data as Task[]).map((task) => {
+  const existingProject = await fetchProject(projectId);
+  
+  const updatedTasks = (existingProject.data as Task[]).map((task) => {
     if (task.id === id) {
       return { ...task, column };
     }
@@ -100,7 +105,27 @@ export const savedChanges = async ({
 
   await db
     .update(project)
-    .set({ data: updatedTask })
+    .set({ data: updatedTasks })
+    .where(eq(project.id, projectId))
+    .execute();
+};
+
+export const deleteTask = async ({
+  projectId,
+  taskId,
+}: {
+  projectId: number;
+  taskId: string;
+}) => {
+  const existingProject = await fetchProject(projectId);
+
+  console.log("taskId : ", taskId)
+  
+  const updatedTasks = (existingProject.data as Task[]).filter(task => task.id !== taskId);
+
+  await db
+    .update(project)
+    .set({ data: updatedTasks })
     .where(eq(project.id, projectId))
     .execute();
 };
