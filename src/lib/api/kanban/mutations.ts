@@ -68,7 +68,7 @@ export const createTask = async ({
     .execute();
 };
 
-export const updateTask = async ({
+export const savedChanges = async ({
   projectId,
   id,
   column,
@@ -78,13 +78,11 @@ export const updateTask = async ({
   column: string;
 }) => {
 
-    console.log(projectId)
   const [existingProject] = await db
     .select()
     .from(project)
     .where(eq(project.id, projectId))
     .execute();
-
 
   if (!existingProject) {
     throw new TRPCError({

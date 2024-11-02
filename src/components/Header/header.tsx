@@ -3,8 +3,14 @@
 import Profile from "./profile"
 import { ModeToggle } from "../ThemeProvider/mode-toggle";
 
-interface HeaderProps {
-  isAuthorize?: boolean;
+type User = {
+  id : string,
+  username : string,
+  email : string,
+}
+
+interface HeaderProps{
+  isAuthorize? : User;
 }
 
 const Header = ({ isAuthorize }: HeaderProps) => { 

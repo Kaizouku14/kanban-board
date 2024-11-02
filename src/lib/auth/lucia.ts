@@ -39,7 +39,6 @@ export const getSession = cache(
  
     // Validate the session using the session ID
     const result = await lucia.validateSession(sessionId);
-    console.log("Result", result)
 
     try {
       // If the session is still fresh (valid), create a new session cookie
