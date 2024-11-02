@@ -4,6 +4,8 @@ import TaskCard from "./card";
 import AddCard from "./add-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Task } from "@/interface/ITask";
+import { api } from "@/app/_trpc/client";
+import { toast } from "sonner";
 
 interface ColumnProps {
   projectId : number;
@@ -26,8 +28,6 @@ const Column: FC<ColumnProps> = ({
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, card: Task) => {
     e.dataTransfer.setData("cardId", card.id);
-
-    console.log(card.id)
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {
@@ -49,17 +49,37 @@ const Column: FC<ColumnProps> = ({
       copy = copy.filter((c) => c.id !== cardId);
       const moveToBack = before === "-1";
 
+      udpateData(cardToTransfer.id, cardToTransfer.column);
+
       if (moveToBack) {
-        copy.push(cardToTransfer);
+        copy.push(cardToTransfer);  
       } else {
         const insertAtIndex = copy.findIndex((el) => el.id === before);
         if (insertAtIndex === -1) return;
         copy.splice(insertAtIndex, 0, cardToTransfer);
       }
-
       setCards(copy);
     }
   };
+
+  const updateTaskMutation = api.kanban.updateTask.useMutation();
+  const udpateData = async (id : string, column : string) => {
+
+    const projectTaskID = projectId;
+    toast.promise(updateTaskMutation.mutateAsync({
+      projectId : projectTaskID,
+      id : id,
+      column : column,
+    }), {
+      loading: "Saving changes...",
+      success: () => {
+        return "Saved.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
+  }
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();

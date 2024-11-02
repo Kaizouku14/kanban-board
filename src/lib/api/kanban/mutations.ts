@@ -67,3 +67,42 @@ export const createTask = async ({
     .where(eq(project.id, projectId))
     .execute();
 };
+
+export const updateTask = async ({
+  projectId,
+  id,
+  column,
+}: {
+  projectId: number;
+  id: string;
+  column: string;
+}) => {
+
+    console.log(projectId)
+  const [existingProject] = await db
+    .select()
+    .from(project)
+    .where(eq(project.id, projectId))
+    .execute();
+
+
+  if (!existingProject) {
+    throw new TRPCError({
+      code: "NOT_FOUND",
+      message: `Project Not found`,
+    });
+  }
+
+  const updatedTask = (existingProject.data as Task[]).map((task) => {
+    if (task.id === id) {
+      return { ...task, column };
+    }
+    return task;
+  });
+
+  await db
+    .update(project)
+    .set({ data: updatedTask })
+    .where(eq(project.id, projectId))
+    .execute();
+};

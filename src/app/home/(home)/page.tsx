@@ -8,7 +8,9 @@ import { api } from "@/app/_trpc/client";
 import { Task } from "@/interface/ITask";
 
 const Page = () => {
-  const { data, error, isLoading } = api.kanban.projects.useQuery();
+  const { data, error, isLoading } = api.kanban.projects.useQuery(undefined,{
+     refetchInterval: 1000,
+  });
 
   if (isLoading) return <div>Loading...</div>;
   if (error) return <div>{error.message}</div>;
