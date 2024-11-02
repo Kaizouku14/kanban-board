@@ -8,6 +8,7 @@ const createContext = async (req : NextRequest) => {
     headers: req.headers,
   });
 }
+
 function handler(req: NextRequest) {
   return fetchRequestHandler({
     endpoint: '/api/trpc',

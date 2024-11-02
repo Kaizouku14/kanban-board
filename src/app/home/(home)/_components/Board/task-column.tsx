@@ -24,6 +24,8 @@ const Column: FC<ColumnProps> = ({
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, card: Card) => {
     e.dataTransfer.setData("cardId", card.id);
+
+    console.log(card.id)
   };
 
   const handleDragEnd = (e: React.DragEvent<HTMLDivElement>) => {

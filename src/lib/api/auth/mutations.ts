@@ -1,5 +1,6 @@
 import { lucia } from "@/lib/auth/lucia";
-import { db, users, eq } from "@/lib/db/schema/users";
+import { db, eq } from "@/lib/db";
+import { users } from "@/lib/db/schema/users";
 import { hashPassword, verifyPassword } from "@/lib/utils";
 import { TRPCError } from "@trpc/server";
 import { generateIdFromEntropySize } from "lucia";

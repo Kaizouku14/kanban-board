@@ -3,11 +3,9 @@ import { redirect } from "next/navigation";
 import type { PropsWithChildren } from "react";
 
 const Layout = async (props : PropsWithChildren) => {
-    const session = await getSession();
+    const { user } = await getSession();
 
-    if (session?.user) {
-      redirect('/page');
-    }
+    if (user) redirect('/home')
     
   return( 
     <>

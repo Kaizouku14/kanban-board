@@ -16,8 +16,10 @@ import {
 import { signInFormSchema } from "../schema";
 import { api } from "@/app/_trpc/client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 const SignInForm = () => {
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof signInFormSchema>>({
     resolver: zodResolver(signInFormSchema),
@@ -32,6 +34,7 @@ const SignInForm = () => {
     toast.promise(signinMutation.mutateAsync(values), {
       loading: "Logging in...",
       success: () => {
+        router.push('/home')
         return "Login successfully.";
       },
       error: (error: unknown) => {

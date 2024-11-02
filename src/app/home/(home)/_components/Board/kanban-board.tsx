@@ -3,18 +3,18 @@
 import React, { FC, useState } from "react";
 import Column from "./task-column";
 
-export interface Card {
-  title: string;
+export interface Task {
   id: string;
-  column: string;
+  title: string;
+  column: "todo" | "in-progress" | "validate" | "done";
 }
 
 interface ProjectTaskData {
-  items : Card[];
+  items : Task[];
 }
 
 const KanbanBoard:FC<ProjectTaskData> = ({ items }) => {
-  const [cards, setCards] = useState<Card[]>(items);
+  const [cards, setCards] = useState<Task[]>(items);
 
 
   return (
