@@ -6,6 +6,11 @@ import Dark from "../_components/theme/dark";
 import { Separator } from "@/components/ui/separator";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Theme"
+};
 
 const Page = () => {
   const theme = useTheme();

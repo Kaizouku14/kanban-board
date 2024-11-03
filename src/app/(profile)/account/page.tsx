@@ -1,6 +1,11 @@
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import AccountForm from "../_components/form/account-form";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Account"
+};
 
 const Page = () => {
   return (

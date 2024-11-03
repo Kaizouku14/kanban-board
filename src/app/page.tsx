@@ -14,7 +14,7 @@ const LandingPage = () => {
           <p className="mt-2 text-center text-base text-gray-600 max-w-3xl">
             Unlock your productivity with our intuitive Kanban Board, designed
             to help you manage tasks effortlessly and visualize your workflow.
-            Whether you're working on personal projects, team collaborations, or
+            Whether youre working on personal projects, team collaborations, or
             tracking your daily to-dos, our tool is here to enhance your
             experience.
           </p>

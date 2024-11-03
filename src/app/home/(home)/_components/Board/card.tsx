@@ -24,7 +24,7 @@ const TaskCard: FC<CardProps> = ({ title, id, column, handleDragStart, projectId
         layout
         layoutId={id}
         draggable="true"
-        onDragStart={(e) => handleDragStart(e, { title, id, column })}
+        onDragStart={(e) => handleDragStart(e as unknown as React.DragEvent<HTMLDivElement>, { title, id, column })}
         
       >
        <EditMenu  
