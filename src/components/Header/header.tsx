@@ -3,7 +3,6 @@
 import Profile from "@/app/(profile)/_components/profile";
 import { ModeToggle } from "../ThemeProvider/mode-toggle";
 import Link from "next/link";
-
 type User = {
   id: string;
   username: string;

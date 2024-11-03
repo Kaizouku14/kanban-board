@@ -17,8 +17,8 @@ const taskSchema = z.object({
 });
 
 export const kanbanRouter = createTRPCRouter({
-  projects: publicProcedure.query(async () => {
-    return await getAllProjects();
+  projects: publicProcedure.query(async ({ ctx }) => {
+    return await getAllProjects(ctx.user?.id);
   }),
 
   createProject: protectedProcedure
