@@ -36,7 +36,7 @@ const CreateProject = () => {
   function onSubmit(values: z.infer<typeof createFormSchema>) {
     toast.promise(createMutation.mutateAsync({
       title: values.projectName,
-      tasks : tasks
+      tasks : tasks 
     }), {
       loading: "Creating project...",
       success: () => {

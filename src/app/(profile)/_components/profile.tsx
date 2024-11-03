@@ -1,6 +1,6 @@
 "use client";
 
-import { User, Settings, LogOut } from "lucide-react";
+import { User, LogOut, SunMoon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,6 +15,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { api } from "@/app/_trpc/client";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import Link from "next/link";
 
 const Profile = () => {
   const router = useRouter();
@@ -48,12 +49,16 @@ const Profile = () => {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>
-            <User />
-            <span>Profile</span>
+            <Link href="/account" className="flex items-center gap-1">
+              <User size={17} />
+              <span>Profile</span>
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Settings />
-            <span>Settings</span>
+            <Link href="/appearance" className="flex items-center gap-1">
+              <SunMoon size={17} />
+              <span>Theme</span>
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuItem onClick={handleLogout}>

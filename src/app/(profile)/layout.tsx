@@ -6,11 +6,11 @@ import type { PropsWithChildren } from "react";
 const Layout = async (props: PropsWithChildren) => {
   const { user } = await getSession();
 
-  if (user) redirect("/home");
+  if (!user) redirect("/login");
 
   return (
     <>
-      <Header />
+      <Header isAuthorize={user}/>
       {props.children}
     </>
   );

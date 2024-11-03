@@ -1,28 +1,28 @@
-"use client"
+"use client";
 
 import Profile from "@/app/(profile)/_components/profile";
 import { ModeToggle } from "../ThemeProvider/mode-toggle";
+import Link from "next/link";
 
 type User = {
-  id : string,
-  username : string,
-  email : string,
+  id: string;
+  username: string;
+  email: string;
+};
+
+interface HeaderProps {
+  isAuthorize?: User;
 }
 
-interface HeaderProps{
-  isAuthorize? : User;
-}
-
-const Header = ({ isAuthorize }: HeaderProps) => { 
-
+const Header = ({ isAuthorize }: HeaderProps) => {
   return (
     <div className="h-24 flex items-center justify-between">
-      <h1 className="text-xl font-bold">Kanban board</h1>
-      {isAuthorize ? <Profile /> : <ModeToggle />} 
+      <Link href={"/home"} className="text-xl font-bold cursor-pointer">
+        Kanban board
+      </Link>
+      {isAuthorize ? <Profile /> : <ModeToggle />}
     </div>
   );
 };
 
-export default Header
-
-
+export default Header;

@@ -118,7 +118,7 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
         <ContextMenuItem>
           {isActive ? (
             <Button
-              className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+              className="flex items-center gap-x-3 px-4 h-6 shadow-none hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
               onClick={() => setIsActive(false)}
             >
               <X strokeWidth={1} size={16} />
@@ -126,7 +126,7 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
             </Button>
           ) : (
             <Button
-              className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+              className="flex items-center gap-x-3 px-4 h-6 shadow-none hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
               onClick={() => setIsActive(true)}
             >
               <Pencil strokeWidth={1} size={16} />
@@ -136,7 +136,7 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
         </ContextMenuItem>
         <ContextMenuItem>
           <Button
-            className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+            className="flex items-center gap-x-3 px-4 h-6 shadow-none hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
             onClick={handleDeleteTask}
           >
             <Trash2Icon strokeWidth={1} size={16} />
