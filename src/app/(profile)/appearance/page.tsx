@@ -11,7 +11,7 @@ const Page = () => {
   const theme = useTheme();
 
   return (
-    <div className="flex flex-col gap-y-4">
+    <div className="flex flex-col gap-y-4 bg-slate-400">
       <div className="h-20">
         <h3 className="text-lg font-medium">Appearance</h3>
         <p className="text-sm text-muted-foreground">
@@ -24,7 +24,7 @@ const Page = () => {
 
       <h1>Theme</h1>
       <div>Select the theme for the dashboard.</div>
-      <div className="w-96 flex gap-x-4">
+      <div className="md:w-96 flex gap-x-4 justify-center">
         <Button className="h-fit bg-transparent text-primary hover:bg-transparent" onClick={() => theme.setTheme("light")}>
           <Light />
         </Button>

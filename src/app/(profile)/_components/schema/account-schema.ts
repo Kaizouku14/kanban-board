@@ -4,6 +4,7 @@ export const accountFormSchema = z
   .object({
     username: z
       .string()
+      .min(1, { message: "username is required." })
       .max(30, {
         message: "Name must not be longer than 30 characters.",
       }),

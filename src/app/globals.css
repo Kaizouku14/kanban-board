@@ -67,7 +67,7 @@
   }
 
   body {
-    @apply bg-background text-foreground md:mx-20 max-md:mx-10;
+    @apply bg-background text-foreground md:mx-20 max-md:mx-6;
     @apply flex flex-col gap-y-6;
   }
   

@@ -18,9 +18,11 @@ import { z } from "zod";
 import { api } from "@/app/_trpc/client";
 import { useEffect } from "react";
 import AccountFormSkeleton from "../skeleton/form-skeleton";
+import { toast } from "sonner";
 
 const AccountForm = () => {
   const { data, isLoading } = api.profile.getUserInfo.useQuery();
+  const updateUserInfoMutation = api.profile.updateUser.useMutation();
 
   const form = useForm<z.infer<typeof accountFormSchema>>({
     resolver: zodResolver(accountFormSchema),
@@ -44,16 +46,24 @@ const AccountForm = () => {
   }, [data, form]);
 
   function onSubmit(values: z.infer<typeof accountFormSchema>) {
-    console.log(values);
+    toast.promise(updateUserInfoMutation.mutateAsync({...values }), {
+        loading: "Saving changes...",
+        success: () => {
+          return "Changes saved successfully.";
+        },
+        error: (error: unknown) => {
+          return (error as Error).message;
+        },
+      });
   }
 
- if (isLoading) return <AccountFormSkeleton/>
+  if (isLoading) return <AccountFormSkeleton />;
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-        <div className="flex items-center gap-x-4">
-          <div className="flex flex-col gap-4">
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-8">
+          <div className="flex flex-col gap-4 w-full">
             <FormField
               control={form.control}
               name="username"
@@ -70,7 +80,6 @@ const AccountForm = () => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="email"
@@ -89,7 +98,7 @@ const AccountForm = () => {
             />
           </div>
 
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4 w-full">
             <FormField
               control={form.control}
               name="password"
@@ -97,7 +106,11 @@ const AccountForm = () => {
                 <FormItem>
                   <FormLabel>Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter current password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     Enter your current password to authorize changes.
@@ -106,15 +119,18 @@ const AccountForm = () => {
                 </FormItem>
               )}
             />
-
             <FormField
               control={form.control}
               name="newPassword"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Confirm Password</FormLabel>
+                  <FormLabel>New Password</FormLabel>
                   <FormControl>
-                    <Input placeholder="Enter new password" {...field} />
+                    <Input
+                      type="password"
+                      placeholder="Enter new password"
+                      {...field}
+                    />
                   </FormControl>
                   <FormDescription>
                     Create a strong password that you haven’t used before.
@@ -126,7 +142,11 @@ const AccountForm = () => {
           </div>
         </div>
 
-        <Button type="submit">Update account</Button>
+        <div className="flex justify-start">
+          <Button type="submit" className="w-full lg:w-auto">
+            Update account
+          </Button>
+        </div>
       </form>
     </Form>
   );

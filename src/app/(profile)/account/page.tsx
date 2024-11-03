@@ -12,7 +12,7 @@ const Page = () => {
         </p>
       </div>
       <Separator />
-      <div className="w-fit">
+      <div className="w-full ">
         <AccountForm/>
       </div>
     </div>
