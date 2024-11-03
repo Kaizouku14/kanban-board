@@ -16,11 +16,18 @@ interface HeaderProps {
 
 const Header = ({ isAuthorize }: HeaderProps) => {
   return (
-    <div className="h-24 flex items-center justify-between">
+    <div className="h-24 flex items-center justify-between ">
       <Link href={"/home"} className="text-xl font-bold cursor-pointer">
         Kanban board
       </Link>
-      {isAuthorize ? <Profile /> : <ModeToggle />}
+      {isAuthorize ? (
+        <div className="flex gap-x-3 items-center">
+          <Profile />
+          <span className="font-medium">{isAuthorize.username}</span>
+        </div>
+      ) : (
+        <ModeToggle />
+      )}
     </div>
   );
 };

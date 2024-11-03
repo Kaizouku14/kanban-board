@@ -14,7 +14,8 @@ const Page = () => {
   });
   const deleteProjetMutation = api.kanban.deleteProject.useMutation();
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div>loading</div>;
+
   if (error) return <div>{error.message}</div>;
 
   const handleDeleteProject = (id: number) => {
