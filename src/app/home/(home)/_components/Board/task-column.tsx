@@ -72,10 +72,6 @@ const Column: FC<ColumnProps> = ({
         column: column,
       }),
       {
-        loading: "Saving changes...",
-        success: () => {
-          return "Changes saved successfully.";
-        },
         error: (error: unknown) => {
           return (error as Error).message;
         },
