@@ -103,7 +103,7 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
             </>
           ) : (
             <>
-              <div className="w-52 truncate">
+              <div className="md:w-52 w-32 truncate">
                 <p className="text-sm dark:text-neutral-100 text-neutral-950">
                   {props.title}
                 </p>

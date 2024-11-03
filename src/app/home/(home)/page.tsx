@@ -7,6 +7,7 @@ import KanbanBoard from "./_components/Board/kanban-board";
 import { api } from "@/app/_trpc/client";
 import { Task } from "@/interface/ITask";
 import { toast } from "sonner";
+import TabsSkeleton from "./_components/skeleton/tabs-skeleton";
 
 const Page = () => {
   const { data, error, isLoading } = api.kanban.projects.useQuery(undefined, {
@@ -14,7 +15,7 @@ const Page = () => {
   });
   const deleteProjetMutation = api.kanban.deleteProject.useMutation();
 
-  if (isLoading) return <div>loading</div>;
+  if (isLoading) return <TabsSkeleton />;
 
   if (error) return <div>{error.message}</div>;
 
@@ -40,17 +41,16 @@ const Page = () => {
       <Tabs defaultValue="add" className="w-full flex flex-col gap-y-1.5">
         {data && (
           <TabsList
-            className={`grid ${
-              data.length > 0 ? "grid-cols-4" : "flex justify-center"
-            } grid-flow-row items-center w-full h-auto gap-2`}
+            className={`grid grid-cols-2 md:grid-cols-4 gap-2 items-center w-full h-auto`}
           >
-            {data?.map((value) => (
+            {data.map((value) => (
               <TabsTrigger
                 key={value.id}
                 value={value.id.toString()}
-                className="px-12 flex items-center relative"
+                className="px-4 md:px-12 flex items-center relative"
               >
-                {value.title}
+               
+                <span className="w-44 truncate max-md:text-xs"> {value.title}</span>
                 <X
                   className="cursor-pointer text-gray-400 absolute right-1.5 bg-transparent hover:bg-transparent"
                   size={16}
@@ -58,9 +58,9 @@ const Page = () => {
                 />
               </TabsTrigger>
             ))}
-            <TabsTrigger value="add">
+            <TabsTrigger value="add" className="px-4 md:px-12">
               <Plus
-                className="text-secondary bg-primary rounded-full "
+                className="text-secondary bg-primary rounded-full"
                 size={20}
               />
             </TabsTrigger>

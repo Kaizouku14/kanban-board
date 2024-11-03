@@ -5,13 +5,13 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { X } from "lucide-react";
-import { 
+import {
   Form,
   FormField,
   FormLabel,
   FormItem,
   FormControl,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -24,7 +24,7 @@ import { Task } from "@/interface/ITask";
 const CreateProject = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [taskInput, setTaskInput] = useState("");
-  
+
   const form = useForm<z.infer<typeof createFormSchema>>({
     resolver: zodResolver(createFormSchema),
     defaultValues: {
@@ -34,27 +34,34 @@ const CreateProject = () => {
 
   const createMutation = api.kanban.createProject.useMutation();
   function onSubmit(values: z.infer<typeof createFormSchema>) {
-    toast.promise(createMutation.mutateAsync({
-      title: values.projectName,
-      tasks : tasks 
-    }), {
-      loading: "Creating project...",
-      success: () => {
-        setTasks([]);
-        return "Project created successfully.";
-      },
-      error: (error: unknown) => {
-        return (error as Error).message;
-      },
-    });
+    toast.promise(
+      createMutation.mutateAsync({
+        title: values.projectName,
+        tasks: tasks,
+      }),
+      {
+        loading: "Creating project...",
+        success: () => {
+          setTasks([]);
+          return "Project created successfully.";
+        },
+        error: (error: unknown) => {
+          return (error as Error).message;
+        },
+      }
+    );
   }
 
   function addTask(task: string) {
     if (task.trim()) {
       const randomId = Math.floor(Math.random() * 10000);
-      const newTask: Task = { id: randomId.toString(), title: task, column: 'todo' };
+      const newTask: Task = {
+        id: randomId.toString(),
+        title: task,
+        column: "todo",
+      };
       setTasks((prevTasks) => [...prevTasks, newTask]);
-      setTaskInput(""); 
+      setTaskInput("");
     }
   }
 
@@ -66,9 +73,9 @@ const CreateProject = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className="flex gap-x-12 items-center h-96"
+        className="flex flex-col max-md:w-full md:flex-row gap-y-8 md:gap-x-12 items-center h-auto md:h-96"
       >
-        <div className="w-96 space-y-8">
+        <div className="w-full md:w-96 space-y-8">
           <FormField
             control={form.control}
             name="projectName"
@@ -83,13 +90,18 @@ const CreateProject = () => {
             )}
           />
 
-          <div className="flex gap-x-4">
+          <div className="flex flex-col md:flex-row gap-4">
             <Input
               placeholder="Task to-do..."
               value={taskInput}
               onChange={(e) => setTaskInput(e.target.value)}
+              className="flex-grow"
             />
-            <Button type="button" onClick={() => addTask(taskInput)}>
+            <Button
+              type="button"
+              onClick={() => addTask(taskInput)}
+              className="w-full md:w-auto"
+            >
               Add
             </Button>
           </div>
@@ -99,7 +111,7 @@ const CreateProject = () => {
           </Button>
         </div>
 
-        <ScrollArea className="size-80">
+        <ScrollArea className="w-full md:w-80 h-80">
           <div className="flex flex-col rounded-lg border border-gray-300 p-4 gap-2">
             {tasks.length > 0 ? (
               tasks.map((task, index) => (

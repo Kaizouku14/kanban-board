@@ -13,7 +13,7 @@ const KanbanBoard: FC<ProjectTaskData> = ({ projectId, items }) => {
   const [cards, setCards] = useState<Task[]>(items);
 
   return (
-    <div className="grid grid-cols-4 w-full p-4">
+    <div className="grid grid-cols-2 md:grid-cols-4 w-full md:p-4">
       <Column
         projectId={projectId}
         title="TO-DO LIST"

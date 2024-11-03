@@ -145,33 +145,33 @@ const Column: FC<ColumnProps> = ({
   const filteredCards = cards.filter((c) => c.column === column);
 
   return (
-    <div className="w-72 shrink-0">
-      <div className="mb-3 flex items-center justify-between px-2.5 ">
-        <h3 className={`font-medium ${headingColor}`}>{title}</h3>
+    <div className="w-full md:w-72 shrink-0">
+      <div className="mb-3 flex items-center justify-between px-2.5">
+        <h3 className={`font-medium max-md:text-sm ${headingColor}`}>{title}</h3>
         <span className="rounded text-sm text-neutral-400">
           {filteredCards.length}
         </span>
       </div>
-      <ScrollArea className="h-80 w-72">
+      <ScrollArea className="h-80 w-full">
+        {" "}
+        {/* Change width to w-full */}
         <div
           onDrop={handleDragEnd}
           onDragOver={handleDragOver}
           onDragLeave={handleDragLeave}
-          className={` w-full transition-colors rounded px-2.5 ${
-            active ? "dark:bg-neutral-800/50 bg-gray-200/50 " : "bg-transparent"
+          className={`w-full transition-colors rounded px-2.5 ${
+            active ? "dark:bg-neutral-800/50 bg-gray-200/50" : "bg-transparent"
           }`}
         >
-          {filteredCards.map((c) => {
-            return (
-              <TaskCard
-                key={c.id}
-                {...c}
-                handleDragStart={handleDragStart}
-                projectId={projectId}
-                setCards={setCards}
-              />
-            );
-          })}
+          {filteredCards.map((c) => (
+            <TaskCard
+              key={c.id}
+              {...c}
+              handleDragStart={handleDragStart}
+              projectId={projectId}
+              setCards={setCards}
+            />
+          ))}
           <DropIndicator beforeId={null} column={column} />
           <AddCard projectId={projectId} column={column} setCards={setCards} />
         </div>
