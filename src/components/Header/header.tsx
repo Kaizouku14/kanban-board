@@ -1,6 +1,6 @@
 "use client"
 
-import Profile from "./profile"
+import Profile from "@/app/(profile)/_components/profile";
 import { ModeToggle } from "../ThemeProvider/mode-toggle";
 
 type User = {

@@ -27,7 +27,7 @@ const TaskCard: FC<CardProps> = ({ title, id, column, handleDragStart, projectId
         onDragStart={(e) => handleDragStart(e, { title, id, column })}
         
       >
-       <EditMenu 
+       <EditMenu  
           title={title} 
           projectId={projectId} 
           taskId={id}

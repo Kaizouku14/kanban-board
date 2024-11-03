@@ -1,19 +1,38 @@
 "use client";
 
+import { User, Settings, LogOut } from "lucide-react";
+import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuGroup,
   DropdownMenuItem,
-} from "../ui/dropdown-menu";
-import { User, Settings, LogOut } from "lucide-react";
-import { Button } from "../ui/button";
-import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { api } from "@/app/_trpc/client";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 const Profile = () => {
+  const router = useRouter();
+  const logoutMutation = api.auth.logout.useMutation();
+
+  const handleLogout = async () => {
+    toast.promise(logoutMutation.mutateAsync(), {
+      loading: "logging out...",
+      success: () => {
+        router.push("/login");
+        return "logged out successfully.";
+      },
+      error: (error: unknown) => {
+        return (error as Error).message;
+      },
+    });
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,7 +56,7 @@ const Profile = () => {
             <span>Settings</span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           <LogOut />
           <span>Log out</span>
         </DropdownMenuItem>
