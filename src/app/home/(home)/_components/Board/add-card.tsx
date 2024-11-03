@@ -18,7 +18,7 @@ const AddCard:FC<AddCardProps> = ({ projectId, column, setCards }) => {
   const [adding, setAdding] = useState(false);
 
   const addTaskMutation = api.kanban.addTask.useMutation();
-  const handleSubmit = (e : FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (e : FormEvent<HTMLFormElement>) => { 
     e.preventDefault();
 
     if (!text.trim().length) return;
@@ -37,7 +37,7 @@ const AddCard:FC<AddCardProps> = ({ projectId, column, setCards }) => {
     }), {
       loading: "Saving changes...",
       success: () => {
-        return "Changes save successfully.";
+        return "Changes saved successfully.";
       },
       error: (error: unknown) => {
         return (error as Error).message;

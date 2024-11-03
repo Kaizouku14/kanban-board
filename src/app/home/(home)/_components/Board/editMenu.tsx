@@ -1,3 +1,5 @@
+"use client";
+
 import { api } from "@/app/_trpc/client";
 import { Button } from "@/components/ui/button";
 import {
@@ -6,9 +8,10 @@ import {
   ContextMenuItem,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import { Input } from "@/components/ui/input";
 import { Task } from "@/interface/ITask";
-import { Grip, Trash2Icon, Pencil } from "lucide-react";
-import React, { Dispatch, SetStateAction } from "react";
+import { Grip, Trash2Icon, Pencil, CircleCheck, X } from "lucide-react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { toast } from "sonner";
 
 interface EditMenuProps {
@@ -19,51 +22,121 @@ interface EditMenuProps {
 }
 
 export const EditMenu = ({ ...props }: EditMenuProps) => {
-
+  const [isActive, setIsActive] = useState(false);
+  const [newTitle, setNewTitle] = useState(props.title);
+  const updateTaskMutation = api.kanban.updateTask.useMutation();
   const deleteTaskMutation = api.kanban.deleteTask.useMutation();
-  const handleDeleteTask = () => {    
-    const { projectId, taskId , setCards} = props;
+
+  const handleEditTask = () => {
+    const { projectId, taskId, setCards } = props;
+
+    toast.promise(
+      updateTaskMutation.mutateAsync({
+        projectId: projectId,
+        taskId: taskId,
+        newTitle: newTitle,
+      }),
+      {
+        loading: "Saving changes...",
+        success: () => {
+          setIsActive(false);
+          setCards((pv) =>
+            pv.filter((c) => {
+              if (c.id === taskId) {
+                c.title = newTitle;
+              }
+              return c;
+            })
+          );
+          return "Changes saved successfully.";
+        },
+        error: (error: unknown) => {
+          return (error as Error).message;
+        },
+      }
+    );
+  };
+
+  const handleDeleteTask = () => {
+    const { projectId, taskId, setCards } = props;
 
     setCards((pv) => pv.filter((c) => c.id !== taskId));
-    toast.promise(deleteTaskMutation.mutateAsync({
-      projectId : projectId,
-      taskId : taskId
-    }), {
-      loading: "Saving changes...",
-      success: () => {
-        return "Changes save successfully.";
-      },
-      error: (error: unknown) => {
-        return (error as Error).message;
-      },
-    });
-  }
+    toast.promise(
+      deleteTaskMutation.mutateAsync({
+        projectId: projectId,
+        taskId: taskId,
+      }),
+      {
+        loading: "Saving changes...",
+        success: () => {
+          return "Changes saved successfully.";
+        },
+        error: (error: unknown) => {
+          return (error as Error).message;
+        },
+      }
+    );
+  };
 
   return (
     <ContextMenu>
       <ContextMenuTrigger>
         <div
-          className="cursor-grab rounded border dark:border-neutral-700 dark:bg-neutral-800 p-3 active:cursor-grabbing
-         border-gray-100 shadow flex items-center justify-between
-        "
+          className={`cursor-grab flex items-center  justify-between  rounded border dark:border-neutral-700 dark:bg-neutral-800 ${
+            isActive ? "p-1" : "p-3"
+          } active:cursor-grabbing
+          border-gray-100 shadow `}
         >
-          <div className="w-52 truncate">
-            <p className="text-sm dark:text-neutral-100 text-neutral-950">
-              {props.title}
-            </p>
-          </div>
-          <Grip strokeWidth={1} size={16} />
+          {isActive ? (
+            <>
+              <Input
+                className="w-52 border shadow-white"
+                placeholder="Enter new task"
+                value={newTitle}
+                onChange={(e) => setNewTitle(e.target.value)}
+              />
+              <CircleCheck
+                className="cursor-pointer text-gray-500 transition-all duration-200 ease-in-out transform hover:text-white hover:fill-green-400 "
+                size={22}
+                onClick={handleEditTask}
+              />
+            </>
+          ) : (
+            <>
+              <div className="w-52 truncate">
+                <p className="text-sm dark:text-neutral-100 text-neutral-950">
+                  {props.title}
+                </p>
+              </div>
+              <Grip strokeWidth={1} size={16} />
+            </>
+          )}
         </div>
       </ContextMenuTrigger>
+
       <ContextMenuContent className="p-2 rounded-md shadow-md ">
         <ContextMenuItem>
-          <Button className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary">
-            <Pencil strokeWidth={1} size={16} />
-            <span className="text-sm">Edit</span>
-          </Button>
+          {isActive ? (
+            <Button
+              className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+              onClick={() => setIsActive(false)}
+            >
+              <X strokeWidth={1} size={16} />
+              <span className="text-sm">Cancel</span>
+            </Button>
+          ) : (
+            <Button
+              className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+              onClick={() => setIsActive(true)}
+            >
+              <Pencil strokeWidth={1} size={16} />
+              <span className="text-sm">Edit</span>
+            </Button>
+          )}
         </ContextMenuItem>
         <ContextMenuItem>
-          <Button className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
+          <Button
+            className="flex items-center gap-x-3 px-4 h-6  hover:bg-transparent rounded-md cursor-pointer bg-transparent text-primary"
             onClick={handleDeleteTask}
           >
             <Trash2Icon strokeWidth={1} size={16} />

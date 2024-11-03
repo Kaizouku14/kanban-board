@@ -7,6 +7,7 @@ import {
   deleteProject,
   deleteTask,
   savedChanges,
+  updateTask,
 } from "@/lib/api/kanban/mutations";
 
 const taskSchema = z.object({
@@ -35,7 +36,7 @@ export const kanbanRouter = createTRPCRouter({
       });
     }),
 
-    deleteProject: protectedProcedure
+  deleteProject: protectedProcedure
     .input(
       z.object({
         projectId: z.number().int(),
@@ -53,10 +54,7 @@ export const kanbanRouter = createTRPCRouter({
       })
     )
     .mutation(({ input }) => {
-      return createTask({
-        projectId: input.projectId,
-        task: input.task,
-      });
+      return createTask({ ...input });
     }),
 
   savedChanges: protectedProcedure
@@ -68,11 +66,19 @@ export const kanbanRouter = createTRPCRouter({
       })
     )
     .mutation(({ input }) => {
-      return savedChanges({
-        projectId: input.projectId,
-        id: input.id,
-        column: input.column,
-      });
+      return savedChanges({ ...input });
+    }),
+
+  updateTask: protectedProcedure
+    .input(
+      z.object({
+        projectId: z.number().int(),
+        taskId: z.string().min(1),
+        newTitle : z.string().min(1),
+      })
+    )
+    .mutation(({ input }) => {
+      return updateTask({ ...input });
     }),
 
   deleteTask: protectedProcedure
@@ -83,10 +89,7 @@ export const kanbanRouter = createTRPCRouter({
       })
     )
     .mutation(({ input }) => {
-      return deleteTask({
-        projectId: input.projectId,
-        taskId: input.taskId,
-      });
+      return deleteTask({ ...input });
     }),
 });
 

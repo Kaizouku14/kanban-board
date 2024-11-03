@@ -110,6 +110,31 @@ export const savedChanges = async ({
     .execute();
 };
 
+export const updateTask = async ({
+  projectId,
+  taskId,
+  newTitle,
+}: {
+  projectId : number;
+  taskId : string,
+  newTitle : string
+}) => {
+  const existingProject = await fetchProject(projectId);
+
+  const updatedTasks = (existingProject.data as Task[]).map((task) => {
+    if (task.id === taskId) {
+      return { ...task, title: newTitle };
+    }
+    return task;
+  });
+
+  await db
+    .update(project)
+    .set({ data: updatedTasks })
+    .where(eq(project.id, projectId))
+    .execute();
+}
+
 export const deleteTask = async ({
   projectId,
   taskId,
@@ -118,8 +143,6 @@ export const deleteTask = async ({
   taskId: string;
 }) => {
   const existingProject = await fetchProject(projectId);
-
-  console.log("taskId : ", taskId)
   
   const updatedTasks = (existingProject.data as Task[]).filter(task => task.id !== taskId);
 
