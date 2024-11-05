@@ -17,6 +17,7 @@ import { signInFormSchema } from "../schema";
 import { api } from "@/app/_trpc/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import PasswordInput from "@/components/forms/password-input";
 
 const SignInForm = () => {
   const router = useRouter();
@@ -34,14 +35,13 @@ const SignInForm = () => {
     toast.promise(signinMutation.mutateAsync(values), {
       loading: "Logging in...",
       success: () => {
+         router.push('/home');
         return "Login successfully.";
       },
       error: (error: unknown) => {
         return (error as Error).message;
       },
     });
-
-    router.push('/home');
   } 
 
   return (
@@ -68,7 +68,7 @@ const SignInForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input placeholder="Password" {...field} />
+                <PasswordInput placeholder="Password" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
