@@ -7,7 +7,6 @@ import { Separator } from "@/components/ui/separator";
 import { useTheme } from "next-themes";
 import { Button } from "@/components/ui/button";
 
-
 const Page = () => {
   const theme = useTheme();
 

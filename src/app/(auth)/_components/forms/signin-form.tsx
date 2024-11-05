@@ -34,13 +34,14 @@ const SignInForm = () => {
     toast.promise(signinMutation.mutateAsync(values), {
       loading: "Logging in...",
       success: () => {
-        router.push('/home')
         return "Login successfully.";
       },
       error: (error: unknown) => {
         return (error as Error).message;
       },
     });
+
+    router.push('/home');
   } 
 
   return (
