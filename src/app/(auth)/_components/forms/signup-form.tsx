@@ -12,10 +12,11 @@ import {
   FormMessage,
   Form,
 } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
 import { api } from "@/app/_trpc/client";
 import { signUpFormSchema } from "../schema";
 import { toast } from "sonner";
+import PasswordInput from "@/components/forms/password-input";
+import SubmitButton from "@/components/forms/submit-button";
 
 const SignUpForm = () => {
   const form = useForm<z.infer<typeof signUpFormSchema>>({
@@ -80,7 +81,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel>Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="Password" {...field} />
+                  <PasswordInput placeholder="Password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -94,7 +95,7 @@ const SignUpForm = () => {
               <FormItem>
                 <FormLabel>Confirm Password</FormLabel>
                 <FormControl>
-                  <Input placeholder="Confirm Password" {...field} />
+                  <PasswordInput placeholder="Confirm password" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -102,9 +103,7 @@ const SignUpForm = () => {
           />
         </div>
 
-        <Button className="w-full" type="submit">
-          Sign in
-        </Button>
+        <SubmitButton mutation={signupMutation}>Sign up</SubmitButton>
       </form>
     </Form>
   );

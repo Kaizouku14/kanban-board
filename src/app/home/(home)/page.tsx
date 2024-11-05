@@ -10,14 +10,12 @@ import { toast } from "sonner";
 import TabsSkeleton from "./_components/skeleton/tabs-skeleton";
 
 const Page = () => {
-  const { data, error, isLoading } = api.kanban.projects.useQuery(undefined, {
+  const { data, isLoading } = api.kanban.projects.useQuery(undefined, {
     refetchInterval: 1000,
   });
   const deleteProjetMutation = api.kanban.deleteProject.useMutation();
 
   if (isLoading) return <TabsSkeleton />;
-
-  if (error) return <div>{error.message}</div>;
 
   const handleDeleteProject = (id: number) => {
     toast.promise(
@@ -71,7 +69,6 @@ const Page = () => {
           <CreateProject />
         </TabsContent>
 
-        {/* Data Content */}
         {data &&
           data.map((value) => (
             <TabsContent key={value.id} value={value.id.toString()}>

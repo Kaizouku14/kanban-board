@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -18,6 +17,7 @@ import { api } from "@/app/_trpc/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PasswordInput from "@/components/forms/password-input";
+import SubmitButton from "@/components/forms/submit-button";
 
 const SignInForm = () => {
   const router = useRouter();
@@ -35,14 +35,14 @@ const SignInForm = () => {
     toast.promise(signinMutation.mutateAsync(values), {
       loading: "Logging in...",
       success: () => {
-         router.push('/home');
-        return "Login successfully.";
+        router.push("/home");
+        return "Logged in successfully";
       },
       error: (error: unknown) => {
         return (error as Error).message;
       },
     });
-  } 
+  }
 
   return (
     <Form {...form}>
@@ -74,9 +74,7 @@ const SignInForm = () => {
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          Sign in
-        </Button>
+        <SubmitButton mutation={signinMutation}>Sign in</SubmitButton>
       </form>
     </Form>
   );

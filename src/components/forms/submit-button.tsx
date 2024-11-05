@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { LoaderCircle } from "lucide-react";
 import type { FormState } from "react-hook-form";
 import { UseMutationResult } from "@tanstack/react-query";
