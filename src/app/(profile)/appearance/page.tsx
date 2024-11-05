@@ -25,10 +25,10 @@ const Page = () => {
       <h1>Theme</h1>
       <div>Select the theme for the dashboard.</div>
       <div className="md:w-96 md:ml-4 flex gap-x-4 justify-center">
-        <Button className="h-fit bg-transparent text-primary hover:bg-transparent" onClick={() => theme.setTheme("light")}>
+        <Button className="h-fit bg-transparent text-primary hover:bg-transparent shadow-none" onClick={() => theme.setTheme("light")}>
           <Light />
         </Button>
-        <Button className="h-fit bg-transparent text-primary hover:bg-transparent" onClick={() => theme.setTheme("dark")}>
+        <Button className="h-fit bg-transparent text-primary hover:bg-transparent shadow-none" onClick={() => theme.setTheme("dark")}>
           <Dark />
         </Button>
       </div>

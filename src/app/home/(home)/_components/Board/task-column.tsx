@@ -150,7 +150,6 @@ const Column: FC<ColumnProps> = ({
       </div>
       <ScrollArea className="h-80 w-full">
         {" "}
-        {/* Change width to w-full */}
         <div
           onDrop={handleDragEnd}
           onDragOver={handleDragOver}

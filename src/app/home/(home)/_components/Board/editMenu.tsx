@@ -67,10 +67,6 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
         taskId: taskId,
       }),
       {
-        loading: "Saving changes...",
-        success: () => {
-          return "Changes saved successfully.";
-        },
         error: (error: unknown) => {
           return (error as Error).message;
         },
@@ -82,7 +78,7 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
     <ContextMenu>
       <ContextMenuTrigger>
         <div
-          className={`cursor-grab flex items-center  justify-between  rounded border dark:border-neutral-700 dark:bg-neutral-800 ${
+          className={`cursor-grab flex items-center  justify-between rounded border dark:border-neutral-700 dark:bg-neutral-800 ${
             isActive ? "p-1" : "p-3"
           } active:cursor-grabbing
           border-gray-100 shadow `}
@@ -90,25 +86,25 @@ export const EditMenu = ({ ...props }: EditMenuProps) => {
           {isActive ? (
             <>
               <Input
-                className="w-52 border shadow-white"
+                className="md:w-56 w-28 border shadow-white"
                 placeholder="Enter new task"
                 value={newTitle}
                 onChange={(e) => setNewTitle(e.target.value)}
               />
               <CircleCheck
-                className="cursor-pointer text-gray-500 transition-all duration-200 ease-in-out transform hover:text-white hover:fill-green-400 "
+                className="max-md:h-4 cursor-pointer text-gray-500 transition-all duration-200 ease-in-out transform hover:text-white hover:fill-green-400 "
                 size={22}
                 onClick={handleEditTask}
               />
             </>
           ) : (
             <>
-              <div className="md:w-52 w-32 truncate">
+              <div className="md:w-56 w-44 text-wrap">
                 <p className="text-sm dark:text-neutral-100 text-neutral-950">
                   {props.title}
                 </p>
               </div>
-              <Grip strokeWidth={1} size={16} />
+              <Grip className="hidden md:block" strokeWidth={1} size={16} />
             </>
           )}
         </div>
